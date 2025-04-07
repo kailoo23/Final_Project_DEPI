@@ -1,0 +1,48 @@
+---
+- name: Deploy JPetStore Docker container on EC2
+  hosts: "{{ target_host | default('localhost') }}" # Uses target_host from Jenkins
+  become: yes
+  vars:
+    docker_image: "khaledmohamed447/jpetstore"
+    docker_tag: "latest"
+    container_name: "jpetstore-app"
+    exposed_port: "8080"
+
+  tasks:
+    - name: Ensure Docker is installed
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+      when: ansible_os_family == "Debian"
+
+    - name: Ensure Docker service is running
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Log in to Docker Hub
+      ansible.builtin.docker_login:
+        username: "{{ dockerhub_username }}"
+        password: "{{ dockerhub_password }}"
+      vars:
+        dockerhub_username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
+        dockerhub_password: "{{ lookup('env', 'DOCKERHUB_PASSWORD') }}"
+      when: dockerhub_username != "" and dockerhub_password != ""
+
+    - name: Stop and remove existing container if it exists
+      ansible.builtin.docker_container:
+        name: "{{ container_name }}"
+        state: absent
+      ignore_errors: yes
+
+    - name: Run JPetStore container
+      ansible.builtin.docker_container:
+        name: "{{ container_name }}"
+        image: "{{ docker_image }}:{{ docker_tag }}"
+        state: started
+        restart_policy: always
+        ports:
+          - "{{ exposed_port }}:8080"
+        detach: yes

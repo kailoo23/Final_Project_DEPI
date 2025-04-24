@@ -9,15 +9,7 @@ pipeline {
     
 
     stages {
-        stage('Setup Ansible') {
-            steps {
-                sh '''
-                    apt-get update
-                    apt-get install -y ansible
-                    pip install docker
-                '''
-            }
-        }
+
         stage('Deploy (Local with Ansible)') {
             steps {
                 withCredentials([

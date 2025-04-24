@@ -14,6 +14,14 @@ pipeline {
             }
         }
 
+     stage('Set up Maven Wrapper') {
+            steps {
+                script {
+                    sh 'mvn -N io.takari:maven:wrapper' 
+                }
+            }
+        }
+
         stage('Build') {
             steps {
                 sh './mvnw clean package -DskipTests=false'

@@ -6,8 +6,18 @@ pipeline {
         DOCKER_IMAGE = "khaledmohamed447/jpetstore-app:latest"
         DOCKER_TAG = "latest" // Use a specific tag or 'latest'
     }
+    
 
     stages {
+        stage('Setup Ansible') {
+            steps {
+                sh '''
+                    apt-get update
+                    apt-get install -y ansible
+                    pip install docker
+                '''
+            }
+        }
         stage('Deploy (Local with Ansible)') {
             steps {
                 withCredentials([

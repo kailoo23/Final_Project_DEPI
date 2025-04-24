@@ -14,7 +14,7 @@ pipeline {
             }
         }
 
-     stage('Set up Maven Wrapper') {
+        stage('Set up Maven Wrapper') {
             steps {
                 script {
                     sh 'mvn -N io.takari:maven:wrapper' 

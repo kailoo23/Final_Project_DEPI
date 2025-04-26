@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = credentials('my-docker-hub') // Jenkins credentials ID
-        DOCKER_IMAGE = "khaledmohamed447/jpetstore"
+        DOCKER_IMAGE = "khaledmohamed447/jpetstore-app"
         DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
 

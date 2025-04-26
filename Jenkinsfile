@@ -11,6 +11,23 @@ pipeline {
       
         stage('Docker Build') {
             steps {
+                    script {
+                    // Stop and remove containers using the image (if any)
+                    sh '''
+                    CONTAINER_IDS=$(docker ps -a -q --filter ancestor=${DOCKER_IMAGE}:latest)
+                    if [ ! -z "$CONTAINER_IDS" ]; then
+                      docker stop $CONTAINER_IDS
+                      docker rm $CONTAINER_IDS
+                    fi
+                    '''
+                    // Now safely remove images
+                    sh "docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true"
+                    sh "docker rmi ${DOCKER_IMAGE}:latest || true"
+                }
+            }
+        }
+        stage('Docker Build') {
+            steps {
                 script {
                     sh '''
                     echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin
@@ -48,21 +65,7 @@ pipeline {
     }
 
     post {
-        always {
-            script {
-                // Stop and remove containers using the image (if any)
-                sh '''
-                CONTAINER_IDS=$(docker ps -a -q --filter ancestor=${DOCKER_IMAGE}:latest)
-                if [ ! -z "$CONTAINER_IDS" ]; then
-                  docker stop $CONTAINER_IDS
-                  docker rm $CONTAINER_IDS
-                fi
-                '''
-                // Now safely remove images
-                sh "docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true"
-                sh "docker rmi ${DOCKER_IMAGE}:latest || true"
-            }
-        }
+ 
         success {
             echo '✅ Pipeline completed successfully!'
         }
@@ -75,6 +78,21 @@ pipeline {
 
 
 
+       // always {
+        //     script {
+        //         // Stop and remove containers using the image (if any)
+        //         sh '''
+        //         CONTAINER_IDS=$(docker ps -a -q --filter ancestor=${DOCKER_IMAGE}:latest)
+        //         if [ ! -z "$CONTAINER_IDS" ]; then
+        //           docker stop $CONTAINER_IDS
+        //           docker rm $CONTAINER_IDS
+        //         fi
+        //         '''
+        //         // Now safely remove images
+        //         sh "docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true"
+        //         sh "docker rmi ${DOCKER_IMAGE}:latest || true"
+        //     }
+        // }
   // stage('Set up Maven Wrapper') {
   //           steps {
   //               script {

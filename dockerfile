@@ -1,4 +1,4 @@
-FROM tomcat:9.0 AS builder
+FROM maven:3.8.4-openjdk-17-slim AS builder
 WORKDIR /app
 COPY . .
 RUN mvn -N io.takari:maven:wrapper

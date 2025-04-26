@@ -9,7 +9,7 @@ pipeline {
 
      stages {
       
-        stage('Docker Build') {
+        stage('Enviroment Inetialization') {
             steps {
                     script {
                     // Stop and remove containers using the image (if any)

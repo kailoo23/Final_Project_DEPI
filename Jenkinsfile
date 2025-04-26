@@ -7,7 +7,7 @@ pipeline {
         DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
 
-
+     stages {
         stage('Set up Maven Wrapper') {
             steps {
                 script {

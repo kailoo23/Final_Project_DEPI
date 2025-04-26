@@ -7,12 +7,6 @@ pipeline {
         DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
 
-    stages {
-        stage('Clone') {
-            steps {
-                git url: 'https://github.com/khaledmohamed447/jpetstore-repo.git', branch: 'main'
-            }
-        }
 
         stage('Set up Maven Wrapper') {
             steps {

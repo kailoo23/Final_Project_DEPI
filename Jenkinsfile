@@ -41,14 +41,24 @@ pipeline {
             }
         }
 
-        stage('Deploy (Local with Ansible)') {
+           stage('Deploy (Local with Ansible)') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'my-docker-hub', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'my-docker-hub',
+                        usernameVariable: 'DOCKERHUB_USERNAME',
+                        passwordVariable: 'DOCKERHUB_PASSWORD'
+                    ),
+                    usernamePassword(
+                        credentialsId: 'my-sudo-creds',  // You need to store your sudo password securely in Jenkins
+                        usernameVariable: 'SUDO_USERNAME',
+                        passwordVariable: 'SUDO_PASSWORD'
+                    )
+                ]) {
                     sh '''
                         export DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME
                         export DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD
-                        export SUDO_PASSWORD="kailoo"  # Securely store or pass the password
-                        ansible-playbook ansible/deploy.yml --ask-become-pass
+                        ansible-playbook ansible/deploy.yml -i inventory.yml -e "target_host=localhost use_sudo=true docker_tag=latest ansible_become_password=$SUDO_PASSWORD"
                     '''
                 }
             }

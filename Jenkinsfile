@@ -7,16 +7,8 @@ pipeline {
         DOCKER_TAG = "${env.BUILD_NUMBER}"
     }
 
-     // stages {
-     //    stage('Set up Maven Wrapper') {
-     //        steps {
-     //            script {
-     //                sh 'mvn -N io.takari:maven:wrapper' 
-     //            }
-     //        }
-     //    }
-
-
+     stages {
+      
         stage('Docker Build') {
             steps {
                 script {
@@ -80,6 +72,16 @@ pipeline {
     }
 }
 
+
+
+
+  // stage('Set up Maven Wrapper') {
+  //           steps {
+  //               script {
+  //                   sh 'mvn -N io.takari:maven:wrapper' 
+  //               }
+  //           }
+  //       }
 
 
         // stage('Build') {

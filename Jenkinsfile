@@ -48,11 +48,6 @@ pipeline {
                         credentialsId: 'my-docker-hub',
                         usernameVariable: 'DOCKERHUB_USERNAME',
                         passwordVariable: 'DOCKERHUB_PASSWORD'
-                    ),
-                    usernamePassword(
-                        credentialsId: 'my-sudo-creds',  // You need to store your sudo password securely in Jenkins
-                        usernameVariable: 'SUDO_USERNAME',
-                        passwordVariable: 'SUDO_PASSWORD'
                     )
                 ]) {
                     sh '''

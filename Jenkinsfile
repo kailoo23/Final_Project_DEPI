@@ -67,8 +67,19 @@ pipeline {
 
     post {
         always {
-            sh "docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true"
-            sh "docker rmi ${DOCKER_IMAGE}:latest || true"
+            script {
+                // Stop and remove containers using the image (if any)
+                sh '''
+                CONTAINER_IDS=$(docker ps -a -q --filter ancestor=${DOCKER_IMAGE}:latest)
+                if [ ! -z "$CONTAINER_IDS" ]; then
+                  docker stop $CONTAINER_IDS
+                  docker rm $CONTAINER_IDS
+                fi
+                '''
+                // Now safely remove images
+                sh "docker rmi ${DOCKER_IMAGE}:${DOCKER_TAG} || true"
+                sh "docker rmi ${DOCKER_IMAGE}:latest || true"
+            }
         }
         success {
             echo '✅ Pipeline completed successfully!'

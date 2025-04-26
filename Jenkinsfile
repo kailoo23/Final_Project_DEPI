@@ -47,7 +47,7 @@ pipeline {
                     sh '''
                         export DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME
                         export DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD
-                        export SUDO_PASSWORD="your_sudo_password"  # Securely store or pass the password
+                        export SUDO_PASSWORD="kailoo"  # Securely store or pass the password
                         ansible-playbook ansible/deploy.yml --ask-become-pass
                     '''
                 }

@@ -43,17 +43,12 @@ pipeline {
 
         stage('Deploy (Local with Ansible)') {
             steps {
-                withCredentials([
-                    usernamePassword(
-                        credentialsId: 'my-docker-hub',
-                        usernameVariable: 'DOCKERHUB_USERNAME',
-                        passwordVariable: 'DOCKERHUB_PASSWORD'
-                    )
-                ]) {
+                withCredentials([usernamePassword(credentialsId: 'my-docker-hub', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                     sh '''
                         export DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME
                         export DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD
-                        ansible-playbook ansible/deploy.yml
+                        export SUDO_PASSWORD="your_sudo_password"  # Securely store or pass the password
+                        ansible-playbook ansible/deploy.yml --ask-become-pass
                     '''
                 }
             }

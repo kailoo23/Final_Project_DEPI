@@ -58,7 +58,7 @@ pipeline {
                     sh '''
                         export DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME
                         export DOCKERHUB_PASSWORD=$DOCKERHUB_PASSWORD
-                        ansible-playbook ansible/deploy.yml -i inventory.yml -e "target_host=localhost use_sudo=true docker_tag=latest ansible_become_password=$SUDO_PASSWORD"
+                        ansible-playbook ansible/deploy.yml -i inventory.yml -e "target_host=localhost use_sudo=true docker_tag=latest""
                     '''
                 }
             }

@@ -6,7 +6,7 @@
     docker_image: "khaledmohamed447/jpetstore-app"
     docker_tag: "{{ docker_tag | default('latest') }}"
     container_name: "jpetstore-app"
-    exposed_port: "8080"
+    exposed_port: "8081"
 
   tasks:
     - name: Ensure Docker is installed

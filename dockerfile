@@ -9,7 +9,7 @@ WORKDIR /usr/local/tomcat/webapps
 COPY target/jpetstore.war ./jpetstore.war
 
 # Expose port 8080 for Tomcat
-EXPOSE 8081
+EXPOSE 8080
 
 # Start Tomcat server
 CMD ["catalina.sh", "run"]
